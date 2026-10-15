@@ -1,0 +1,132 @@
+.container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Space between suggestion cards and the input bar */
+}
+
+/* --- Added Grid Layout for Suggested Prompt Cards --- */
+.suggestionsWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.suggestionCard {
+  background-color: var(--bg-input);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.suggestionCard:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px); /* Slight hover lift effect */
+}
+
+.suggestionCard:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.cardText {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 400;
+  font-family: inherit;
+}
+
+/* --- Pristine Original Form Styles Retained --- */
+.form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-input); /* KEPT AS IS: Left your theme variable colors untouched */
+  border: 1px solid var(--border-input); /* KEPT AS IS: Left your theme variable colors untouched */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  
+  /* MATCHES IMAGE DIMENSIONS: Added the full pill-oval rounding and taller height padding */
+  border-radius: 9999px; 
+  padding: 10px 24px;  
+  
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.icon {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  padding: 12px;
+  outline: none;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+}
+
+.submitBtn {
+  background-color: var(--text-primary);
+  color: var(--bg-main);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitBtn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+/* Smooth enter animation for cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
