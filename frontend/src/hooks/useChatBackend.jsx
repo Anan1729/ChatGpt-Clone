@@ -88,6 +88,18 @@ const useChatBackend = () => {
 
       const json = await response.json();
 
+      // Check if the backend server or AI API returned a high traffic / network error status code
+      if (response.status === 503 || !json.success) {
+        const botMessage = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content:
+            "⚠️ **The AI server is currently experiencing high traffic.** Spikes in demand are temporary. Please wait a moment and click send again!",
+        };
+        setConversations((prev) => [...prev, botMessage]);
+        return;
+      }
+
       if (json.success) {
         const botMessage = {
           id: (Date.now() + 1).toString(),
@@ -103,6 +115,14 @@ const useChatBackend = () => {
       }
     } catch (error) {
       console.error("Failed to transmit user prompt:", error);
+      // Log visual warning banner in application container workspace layout when connections time out completely
+      const connectionErrorMessage = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content:
+          "❌ **Connection Error.** Unable to communicate with the server. Please verify your internet connection or server state and try again.",
+      };
+      setConversations((prev) => [...prev, connectionErrorMessage]);
     } finally {
       setIsLoading(false); // Guaranteeing loader releases under production load boundaries
     }
@@ -128,5 +148,6 @@ const useChatBackend = () => {
 
   return { conversations, isLoading, sendMessage, clearChat };
 };
+
 
 export { useChatBackend };
