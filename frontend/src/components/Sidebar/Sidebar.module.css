@@ -10,7 +10,7 @@
   
   /* 🔍 FIX 1: Change this from overflow-x: hidden to overflow: hidden */
   overflow: hidden; 
-  height: 100%;
+   height: 100vh; 
 }
 
 /* --- Added Collapsible Mode Modifiers --- */
@@ -72,6 +72,8 @@
   flex: 1;
   width: 100%;
   transition: opacity 0.2s ease;
+    overflow: hidden; 
+  min-height: 0;
 }
 
 /* --- Added Text Clamping Visibility Controllers --- */
@@ -179,10 +181,35 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  
-  /* 🔍 FIX 2: Prevent the list container from spilling over or growing wider */
   width: 100%;
   overflow-x: hidden; 
+   padding-top: 4px; 
+    padding-right: 4px;   
+  /* 🔍 NEW ADVANCED LAYOUT MODIFICATIONS FOR MASSIVE HISTORIES */
+  max-height: 160px;    /* 1. Prevents the history area from growing too tall */
+  overflow-y: auto;        /* 2. Automatically shows a scrollbar ONLY if chats exceed max-height */
+     flex-shrink: 0; 
+     
+}
+
+.historyListWrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+.historyListWrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.historyListWrapper::-webkit-scrollbar-thumb {
+  /* This automatically detects if the global theme is dark or light */
+  background-color: var(--text-secondary, rgba(0, 0, 0, 0.2)); 
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+/* Optional Pro Addition: Make the scrollbar slightly more prominent when hovered over */
+.historyListWrapper:hover::-webkit-scrollbar-thumb {
+  background-color: var(--text-primary, rgba(0, 0, 0, 0.35));
 }
 
 /* Small, clean uppercase context label tracking the dynamic sidebar window section */
