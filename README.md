@@ -9,7 +9,7 @@ A production-ready, full-stack ChatGPT clone featuring a highly responsive React
 ## 🌟 Key Features
 
 ### 🎨 Frontend UI & Visual Polish
-* **Dynamic Personalized Greeting:** Greets users with a custom, centered welcome screen layout (**"Hello, IT"**) when conversation logs are cleared.
+* **Dynamic Personalized Greeting:** Greets users with a custom, centered welcome screen layout (**"Hello, A"**) when conversation logs are cleared.
 * **Pill-Rounded Oval Constraints:** The message input bar features a spacious, continuous oval-rounded design matching native layout dimensions.
 * **Suggested Prompt Quick-Cards:** Responsive starter query blocks display automatically on empty canvases to guide user interactions.
 * **Markdown & Syntax Highlighting:** Renders rich text layouts fluidly, parsing complex coding blocks into dedicated, colored console cells.

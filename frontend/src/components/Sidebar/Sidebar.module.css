@@ -107,6 +107,7 @@
   white-space: nowrap; /* Stops titles from breaking into double lines when shrinking */
   transition: background-color 0.2s;
   width: 236px; /* Explicit width locks consistency before container width folds */
+  position: relative; /* Necessary anchor point context for our hover button alignment */
 }
 
 .item:hover {
@@ -162,4 +163,72 @@
 .userPlan {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   ADDED PROFESSIONAL RECENT CHATS HISTORICAL ROUTING LAYOUTS
+   ========================================================================== */
+
+/* Separator container block separating custom user threads from navigation rules */
+.historyListWrapper {
+  margin: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Small, clean uppercase context label tracking the dynamic sidebar window section */
+.historyLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  padding-left: 12px;
+  margin-bottom: 4px;
+}
+
+/* Fluid truncation layout making long titles drop into sleek trailing dots (...) */
+.sessionTitleText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px; 
+  display: inline-block;
+  flex-grow: 1;
+}
+
+/* Premium gray-frost highlight wrapper highlighting the active thread folder context link */
+.activeSessionItem {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  font-weight: 500;
+}
+
+/* Independent, custom trash utility icon layout aligned smoothly to the container edge */
+.singleDeleteBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0; /* Hidden by default to look perfectly clean and minimalist */
+  transition: opacity 0.2s ease, color 0.2s ease;
+  position: absolute;
+  right: 10px;
+}
+
+/* Professional touch: The trash can button blends into view ONLY when hovering over that specific row item */
+.item:hover .singleDeleteBtn {
+  opacity: 1;
+}
+
+.singleDeleteBtn:hover {
+  background-color: rgba(239, 68, 68, 0.15); /* Soft premium red warning wash */
+  color: #ef4444;
 }
