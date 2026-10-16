@@ -1,18 +1,17 @@
 import mysql from "mysql2/promise";
 
-
 const db = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME || "gpt-clone", 
+  database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  // 🔍 PRODUCTION LOCK: Aiven cloud database infrastructure strictly demands active SSL security encryption
+  ssl: {
+    rejectUnauthorized: true,
+  },
 });
-
-
-
-
 
 export default db;
