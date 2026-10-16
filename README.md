@@ -90,4 +90,4 @@ This project is a non-commercial, open-source **educational clone** created stri
 * **ChatGPT** and its logo/design style are registered trademarks of OpenAI. This project is not affiliated with, endorsed by, or associated with OpenAI in any capacity.
 * This code serves as a personal demonstration of full-stack engineering skills, showcasing the implementation of relational database storage, asynchronous middleware pipelines, custom tokenization models, and UI state synchronization.
 
-**Created by Anan1729 — 2026**
+**Created by Ananya Wubshiet — 2026**
