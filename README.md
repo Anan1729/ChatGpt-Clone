@@ -2,7 +2,7 @@
 
 A production-ready, full-stack ChatGPT clone featuring a highly responsive React frontend UI and a robust Node.js/Express backend anchored by a MySQL database. Powered securely by Google's **Gemini 3 Flash** artificial intelligence engine.
 
-### 🌐 [Click Here to View the Live Application](https://netlify.app) 🚀
+### 🌐 [Click Here to View the Live Application](https://ananya-chatgpt.netlify.app/) 🚀
 
 ---
 
