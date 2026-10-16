@@ -27,12 +27,13 @@
 .clearAllHistoryBtn {
   margin-top: 0px !important;
   margin-bottom: 12px !important;
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15)) !important;
+   border: none !important; 
   background-color: transparent !important;
   color: var(--text-primary) !important;
   flex-shrink: 0;
   font-weight: inherit;
   transition: background-color 0.2s;
+ 
 }
 
 .clearAllHistoryBtn:hover {
@@ -109,7 +110,7 @@
 
 /* Specialized highlighted theme rule for the New Chat action block */
 .newChatBtn {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+   border: none !important; 
   background-color: rgba(255, 255, 255, 0.02);
   margin-bottom: 8px;
 }
