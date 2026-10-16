@@ -11,7 +11,7 @@ const db = mysql.createPool({
   queueLimit: 0,
   // 🔍 PRODUCTION LOCK: Aiven cloud database infrastructure strictly demands active SSL security encryption
   ssl: {
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   },
 });
 
