@@ -9,21 +9,19 @@ import {
   FolderKanban,
   PanelLeftClose,
   PanelLeftOpen,
-  Trash2, // Added professional utility icon to clear single sessions
+  Trash2,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 
-// Dynamic switch API endpoint bases depending on your production context matching your hook layer
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const Sidebar = ({ clearChat }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [sessions, setSessions] = useState([]); // Dynamic chat threads history list
+  const [sessions, setSessions] = useState([]);
   const [activeId, setActiveId] = useState(
     localStorage.getItem("active_chat_session_id"),
   );
 
-  // 1. Core workflow to pull session list records out of your database tables
   const loadSidebarSessions = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/chat/sessions`);
@@ -36,7 +34,6 @@ const Sidebar = ({ clearChat }) => {
     }
   };
 
-  // 2. Add event trackers to listen to changes on component borders automatically
   useEffect(() => {
     loadSidebarSessions();
 
@@ -50,15 +47,12 @@ const Sidebar = ({ clearChat }) => {
       window.removeEventListener("sidebar-refresh", handleRefreshEvent);
   }, []);
 
-  // 3. Select an old chat folder and load its specific conversation stream
   const handleSelectSession = (sessionId) => {
     localStorage.setItem("active_chat_session_id", sessionId);
     setActiveId(sessionId);
-    // Tell the custom hook that a new active conversation folder context has loaded
     window.dispatchEvent(new Event("active-session-updated"));
   };
 
-  // 4. Industry-Standard "New Chat" Screen Refresh (Frontend only—zero deletion!)
   const handleNewChatClick = (e) => {
     e.preventDefault();
     localStorage.removeItem("active_chat_session_id");
@@ -66,9 +60,8 @@ const Sidebar = ({ clearChat }) => {
     window.dispatchEvent(new Event("active-session-updated"));
   };
 
-  // 5. Professional Addition: Drop a single chat thread from history list
   const handleDeleteSession = async (e, sessionId) => {
-    e.stopPropagation(); // Stops parent container click triggers from firing simultaneously
+    e.stopPropagation();
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/chat/sessions/${sessionId}`,
@@ -98,9 +91,9 @@ const Sidebar = ({ clearChat }) => {
     <aside
       className={`${styles.sidebar} ${isOpen ? styles.open : styles.collapsed}`}
     >
+      {/* 🔍 TOP HEADER FIXED: Restored back to its clean, small original icon configuration */}
       <div className={styles.header}>
         <div className={styles.logo}>
-          {/* Interactive Collapsible Window Trigger Hook */}
           <button
             type="button"
             className={styles.iconBtn}
@@ -127,7 +120,6 @@ const Sidebar = ({ clearChat }) => {
         )}
       </div>
 
-      {/* Navigation panel contents only render visibly when sidebar container is expanded */}
       <nav
         className={`${styles.nav} ${isOpen ? styles.visible : styles.hidden}`}
       >
@@ -140,7 +132,27 @@ const Sidebar = ({ clearChat }) => {
           <span>New chat</span>
         </a>
 
-        {/* Dynamic Historic Conversation Lists Segment Wrapper */}
+        {/* Master deletion action block matching ChatGPT theme styling configurations */}
+        {isOpen && (
+          <button
+            type="button"
+            className={`${styles.item} ${styles.clearAllHistoryBtn}`}
+            onClick={async (e) => {
+              e.preventDefault();
+              if (
+                window.confirm(
+                  "Are you sure you want to permanently clear all chat history?",
+                )
+              ) {
+                await clearChat();
+              }
+            }}
+            title="Permanently wipe all conversations"
+          >
+            <Trash2 size={18} />
+            <span>Clear all history</span>
+          </button>
+        )}
         {sessions.length > 0 && (
           <div className={styles.historyListWrapper}>
             <div className={styles.historyLabel}>Recent Chats</div>
@@ -152,7 +164,6 @@ const Sidebar = ({ clearChat }) => {
               >
                 <MessageSquare size={18} />
                 <span className={styles.sessionTitleText}>{chat.title}</span>
-                {/* Single Thread Delete Trash Icon Button Action */}
                 <button
                   type="button"
                   className={styles.singleDeleteBtn}
@@ -195,5 +206,4 @@ const Sidebar = ({ clearChat }) => {
   );
 };
 
-// Exporting at the bottom to remain matching your preferred pattern rules
 export default Sidebar;
