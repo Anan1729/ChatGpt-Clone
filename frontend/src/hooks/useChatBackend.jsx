@@ -42,6 +42,7 @@ const useChatBackend = () => {
   }, []);
 
   // 2. Core action to send a prompt to the backend server
+  // 2. Core action to send a prompt to the backend server
   const sendMessage = async (text) => {
     if (!text || !text.trim()) return;
 
@@ -59,17 +60,31 @@ const useChatBackend = () => {
       let currentSessionId = localStorage.getItem("active_chat_session_id");
 
       // Step B: If starting a fresh chat view session, provision the table line row structure upstream first
-      if (!currentSessionId) {
+      if (!currentSessionId || currentSessionId === "undefined") {
         const sessionResponse = await fetch(
           `${API_BASE_URL}/api/chat/sessions/new`,
           { method: "POST" },
         );
         const sessionJson = await sessionResponse.json();
-        if (sessionJson.success) {
-          currentSessionId = sessionJson.data.sessionId;
-          localStorage.setItem("active_chat_session_id", currentSessionId);
-          // Alert sidebar to update list rendering schemas instantly
-          window.dispatchEvent(new Event("sidebar-refresh"));
+
+        if (sessionJson.success && sessionJson.data) {
+          // FIX 1: Safely handle if data comes as an array or an object
+          if (Array.isArray(sessionJson.data) && sessionJson.data.length > 0) {
+            currentSessionId =
+              sessionJson.data[0].id || sessionJson.data[0].sessionId;
+          } else {
+            currentSessionId =
+              sessionJson.data.id || sessionJson.data.sessionId;
+          }
+
+          if (currentSessionId) {
+            localStorage.setItem("active_chat_session_id", currentSessionId);
+            window.dispatchEvent(new Event("sidebar-refresh"));
+          } else {
+            console.error("Could not find a valid ID inside sessionJson.data");
+            setIsLoading(false);
+            return;
+          }
         } else {
           console.error(
             "Could not construct background session pipeline validation parameters",
@@ -79,17 +94,33 @@ const useChatBackend = () => {
         }
       }
 
+      // Step C: Transmit the user's question along with the clean session ID
       const response = await fetch(`${API_BASE_URL}/api/chat/conversations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Added currentSessionId key mapping match to align smoothly with your modified backend service logic configurations
         body: JSON.stringify({ question: text, sessionId: currentSessionId }),
       });
 
       const json = await response.json();
 
-      // Check if the backend server or AI API returned a high traffic / network error status code
-      if (response.status === 503 || !json.success) {
+      // FIX 2: Check if response has valid success and data payload back from Gemini
+      if (json.success && json.data) {
+        const botMessage = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          // FIX 3: Check all common layout positions where Gemini saves text answers
+          content:
+            json.data.reply ||
+            json.data.content ||
+            json.data.text ||
+            (typeof json.data === "string"
+              ? json.data
+              : "Response logged successfully."),
+        };
+        setConversations((prev) => [...prev, botMessage]);
+        window.dispatchEvent(new Event("sidebar-refresh"));
+      } else {
+        // Fallback banner triggered only if the backend truly crashes or flags an error
         const botMessage = {
           id: (Date.now() + 1).toString(),
           role: "assistant",
@@ -97,25 +128,9 @@ const useChatBackend = () => {
             "⚠️ **The AI server is currently experiencing high traffic.** Spikes in demand are temporary. Please wait a moment and click send again!",
         };
         setConversations((prev) => [...prev, botMessage]);
-        return;
-      }
-
-      if (json.success) {
-        const botMessage = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content:
-            json.data.reply ||
-            json.data.content ||
-            "Message logged in database successfully.",
-        };
-        setConversations((prev) => [...prev, botMessage]);
-        // Trigger background refresh tracker block to update title snippets dynamically in sidebar display logs
-        window.dispatchEvent(new Event("sidebar-refresh"));
       }
     } catch (error) {
       console.error("Failed to transmit user prompt:", error);
-      // Log visual warning banner in application container workspace layout when connections time out completely
       const connectionErrorMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
@@ -147,7 +162,7 @@ const useChatBackend = () => {
   };
 
   return { conversations, isLoading, sendMessage, clearChat };
-};
+};;
 
 
 export { useChatBackend };
